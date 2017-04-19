@@ -23,7 +23,7 @@
  *
  */
 
-$title = 'Clients';
+$title = 'Klienti';
 $this->headTitle($title);
 
 ?>
@@ -34,7 +34,7 @@ $this->headTitle($title);
 <div class="panel panel-default">
 
 <div class="panel-heading">
-<h3 class="panel-title">Clients</h3>
+<h3 class="panel-title">Klienti</h3>
 </div>
 
 <div class="panel-body">
@@ -42,9 +42,9 @@ $this->headTitle($title);
 <table class="table table-hover" id="clients">
 
 <thead class="bg-primary">
-   <th><?php echo $this->translate("Name"); ?></th>
-   <th><?php echo $this->translate("Version"); ?></th>
-   <th><?php echo $this->translate("Actions"); ?></th>
+   <th><?php echo $this->translate("Meno"); ?></th>
+   <th><?php echo $this->translate("Verzia"); ?></th>
+   <th><?php echo $this->translate("Akcie"); ?></th>
 </thead>
 
 </table>
@@ -65,6 +65,32 @@ $this->headTitle($title);
 $(document).ready(function() {
 
    var table= $('#clients').DataTable( {
+
+                "language":    {
+                        "sEmptyTable":     "Nie sú k dispozícii žiadne dáta",
+                        "sInfo":           "Záznam _START_ až _END_ z celkom _TOTAL_",
+                        "sInfoEmpty":      "Záznam 0 až 0 z celkom 0 ",
+                        "sInfoFiltered":   "(vyfiltrované spomedzi _MAX_ záznamov)",
+                        "sInfoPostFix":    "",
+                        "sInfoThousands":  ",",
+                        "sLengthMenu":     "Zobraz _MENU_ záznamov",
+                        "sLoadingRecords": "Načítavam...",
+                        "sProcessing":     "Spracúvam...",
+                        "sSearch":         "Hľadať:",
+                        "sZeroRecords":    "Nenašli sa žiadne vyhovujúce záznamy",
+                        "oPaginate": {
+                                "sFirst":    "Prvá",
+                                "sLast":     "Posledná",
+                                "sNext":     "Nasledujúca",
+                                "sPrevious": "Predchádzajúca"
+                        },
+                        "oAria": {
+                                "sSortAscending":  ": aktivujte na zoradenie stĺpca vzostupne",
+                                "sSortDescending": ": aktivujte na zoradenie stĺpca zostupne"
+                        }
+                },
+
+
       "ajax": {
          "url": "<?php echo $this->url('client', array('action' => 'getData'), null) . '?data=all'; ?>",
          "dataSrc": ""
@@ -83,7 +109,7 @@ $(document).ready(function() {
          {
             "className": "actions",
             "orderable": false,
-            "data": "name"
+            "data": null
          }
       ],
       "paging":   true,
@@ -91,7 +117,6 @@ $(document).ready(function() {
       "info":     true,
       "pagingType": "full_numbers",
       "stateSave": true,
-      "order": [[0, 'asc']],
       "columnDefs": [
          {
             "targets": 0,
@@ -101,9 +126,10 @@ $(document).ready(function() {
             }
          },
          {
-            "targets": 2,
+            "targets": -1,
+            "data": "name",
             "render": function(data, type, full, meta) {
-               return '<a href="<?php echo $this->basePath() . '/restore/index?type=client&client='; ?>'+data+'"><button type="button" class="btn btn-default btn-xs" id="btn-1" data-toggle="tooltip" data-placement="top" title="Restore"><span class="glyphicon glyphicon-import"></span></button></a>';
+               return '<a href="<?php echo $this->basePath() . '/restore/index?type=client&client='; ?>'+data.name+'"><button type="button" class="btn btn-default btn-xs" id="btn-1" data-toggle="tooltip" data-placement="top" title="Obnoviť"><span class="glyphicon glyphicon-import"></span></button></a>';
             }
          }
       ]
