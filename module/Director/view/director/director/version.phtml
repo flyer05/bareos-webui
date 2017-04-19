@@ -23,17 +23,17 @@
  *
  */
 
-$title = 'Director';
+$title = 'Riadiaci Server - Verzia';
 $this->headTitle($title);
 
 ?>
 
 <ul class="nav nav-tabs">
-   <li><a href="<?php echo $this->url('director', array('action'=>'index')); ?>"><?php echo $this->translate('Status'); ?></a></li>
-   <li><a href="<?php echo $this->url('director', array('action'=>'messages')); ?>"><?php echo $this->translate('Messages'); ?></a></li>
-   <li><a href="<?php echo $this->url('director', array('action'=>'schedule')); ?>"><?php echo $this->translate('Schedule'); ?></a></li>
-   <li><a href="<?php echo $this->url('director', array('action'=>'schedulerstatus')); ?>"><?php echo $this->translate('Scheduler status'); ?></a></li>
-   <li class="active"><a href="<?php echo $this->url('director', array('action'=>'version')); ?>"><?php echo $this->translate('Version'); ?></a></li>
+   <li><a href="<?php echo $this->url('director', array('action'=>'index')); ?>"><?php echo $this->translate('Stav'); ?></a></li>
+   <li><a href="<?php echo $this->url('director', array('action'=>'messages')); ?>"><?php echo $this->translate('Správy'); ?></a></li>
+   <li><a href="<?php echo $this->url('director', array('action'=>'schedule')); ?>"><?php echo $this->translate('Naplánované'); ?></a></li>
+   <li><a href="<?php echo $this->url('director', array('action'=>'schedulerstatus')); ?>"><?php echo $this->translate('Stav plánovania'); ?></a></li>
+   <li class="active"><a href="<?php echo $this->url('director', array('action'=>'version')); ?>"><?php echo $this->translate('Verzia'); ?></a></li>
 </ul>
 
 <br />
