@@ -24,7 +24,7 @@
  *
  */
 
-$title = 'Pool details';
+$title = 'Detaily Skupiny';
 $this->headTitle($title);
 
 ?>
@@ -36,7 +36,7 @@ $this->headTitle($title);
 <div class="panel panel-default">
 
 <div class="panel-heading">
-<h3 class="panel-title">Pool</h3>
+<h3 class="panel-title">Skupina</h3>
 </div>
 
 <div class="panel-body">
@@ -44,13 +44,13 @@ $this->headTitle($title);
 <table class="table table-hover" id="pool">
 
 <thead class="bg-primary">
-   <th>Name</th>
-   <th>Type</th>
-   <th>Volumes</th>
-   <th>Maximum volumes</th>
-   <th>Volume retention</th>
-   <th>Maximum volume jobs</th>
-   <th>Maximum volume bytes</th>
+   <th>Meno</th>
+   <th>Typ</th>
+   <th>Záznamov</th>
+   <th>Maximálny počet</th>
+   <th>Počet retencií</th>
+   <th>Maximálny počet jobov</th>
+   <th>Maximálna veľkosť</th>
 </thead>
 
 </table>
@@ -67,7 +67,7 @@ $this->headTitle($title);
 <div class="panel panel-default">
 
 <div class="panel-heading">
-<h3 class="panel-title">Volumes</h3>
+<h3 class="panel-title">Záznamy</h3>
 </div>
 
 <div class="panel-body">
@@ -76,15 +76,15 @@ $this->headTitle($title);
 
 <thead class="bg-primary">
    <th></th>
-   <th>Name</th>
-   <th>Storage</th>
-   <th>Type</th>
-   <th>Last written</th>
-   <th>Status</th>
-   <th>Retention/Expiration</th>
-   <th>Maximum bytes</th>
-   <th>Current bytes</th>
-   <th>Free bytes</th>
+   <th>Meno</th>
+   <th>Úložisko</th>
+   <th>Typ</th>
+   <th>Posledný zápis</th>
+   <th>Stav</th>
+   <th>Úschova/Expirácia</th>
+   <th>Maximílna veľkosť</th>
+   <th>Aktuálna veľkosť</th>
+   <th>Voľné miesto</th>
 </thead>
 
 </table>
@@ -97,8 +97,6 @@ $this->headTitle($title);
 <?php
    echo $this->headScript()->prependFile($this->basePath() . '/js/jquery.dataTables.min.js');
    echo $this->headScript()->prependFile($this->basePath() . '/js/dataTables.bootstrap.min.js');
-   echo $this->headScript()->prependFile($this->basePath() . '/js/dataTables.plugins.js');
-   echo $this->headScript()->prependFile($this->basePath() . '/js/dataTables.functions.js');
    echo $this->headLink()->prependStylesheet($this->basePath() . '/css/dataTables.bootstrap.min.css');
 ?>
 
@@ -121,26 +119,36 @@ tr.shown td.details-control:after {
 <script>
 
 function format( d ) {
+
+   var r;
+
+   if(d.recycle == 1) {
+      r = '<span class="label label-success">Yes</span>';
+   }
+   else {
+      r = '<span class="label label-danger">No</span>';
+   }
+
    return '<table class="table table-bordered">'+
       '<tr>'+
-      '<th>Label date</th>'+
+      '<th>Dátum</th>'+
       '<td>'+ d.labeldate +'</td>'+
       '</tr>'+
       '<tr>'+
-      '<th>First written</th>'+
+      '<th>Prvý zápis</th>'+
       '<td>'+ d.firstwritten +'</td>'+
       '</tr>'+
       '<tr>'+
-      '<th>Last written</th>'+
+      '<th>Posledný zápis</th>'+
       '<td>'+ d.lastwritten +'</td>'+
       '</tr>'+
       '<tr>'+
-      '<th>Volume jobs</th>'+
+      '<th>Počet jobov</th>'+
       '<td>'+ d.voljobs +'</td>'+
       '</tr>'+
       '<tr>'+
-      '<th>Recycle</th>'+
-      '<td>'+ formatRecycle(d.recycle) +'</td>'+
+      '<th>Zmazané</th>'+
+      '<td>'+ r +'</td>'+
       '</tr>'+
       '</table>';
 }
@@ -148,18 +156,43 @@ function format( d ) {
 $(document).ready(function() {
 
    var tab_pool = $('#pool').DataTable( {
+
+                "language":    {
+                        "sEmptyTable":     "Nie sú k dispozícii žiadne dáta",
+                        "sInfo":           "Záznam _START_ až _END_ z celkom _TOTAL_",
+                        "sInfoEmpty":      "Záznam 0 až 0 z celkom 0 ",
+                        "sInfoFiltered":   "(vyfiltrované spomedzi _MAX_ záznamov)",
+                        "sInfoPostFix":    "",
+                        "sInfoThousands":  ",",
+                        "sLengthMenu":     "Zobraz _MENU_ záznamov",
+                        "sLoadingRecords": "Načítavam...",
+                        "sProcessing":     "Spracúvam...",
+                        "sSearch":         "Hľadať:",
+                        "sZeroRecords":    "Nenašli sa žiadne vyhovujúce záznamy",
+                        "oPaginate": {
+                                "sFirst":    "Prvá",
+                                "sLast":     "Posledná",
+                                "sNext":     "Nasledujúca",
+                                "sPrevious": "Predchádzajúca"
+                        },
+                        "oAria": {
+                                "sSortAscending":  ": aktivujte na zoradenie stĺpca vzostupne",
+                                "sSortDescending": ": aktivujte na zoradenie stĺpca zostupne"
+                        }
+                },
+
       "ajax": {
          "url": "<?php echo $this->url('pool', array('action' => 'getData'), null) . '?data=details&pool='.$this->pool; ?>",
          "dataSrc": ""
       },
       "columns" : [
-         { "data": "name" },
-         { "data": "pooltype" },
-         { "data": "numvols" },
-         { "data": "maxvols" },
-         { "data": "volretention" },
-         { "data": "maxvoljobs" },
-         { "data": "maxvolbytes" }
+         { "data": null },
+         { "data": null },
+         { "data": null },
+         { "data": null },
+         { "data": null },
+         { "data": null },
+         { "data": null }
       ],
       "paging":   false,
       "ordering": false,
@@ -169,15 +202,56 @@ $(document).ready(function() {
       "bFilter": false,
       "columnDefs": [
          {
-            "targets": 4,
+            "targets": 0,
+            "data": null,
             "render": function(data, type, full, meta) {
-               return formatRetention(data);
+               return data.name;
+            }
+         },
+         {
+            "targets": 1,
+            "data": null,
+            "render": function(data, type, full, meta) {
+               return data.pooltype;
+            }
+         },
+         {
+            "targets": 2,
+            "data": null,
+            "render": function(data, type, full, meta) {
+               return data.numvols;
+            }
+         },
+         {
+            "targets": 3,
+            "data": null,
+            "render": function(data, type, full, meta) {
+               return data.maxvols;
+            }
+         },
+         {
+            "targets": 4,
+            "data": null,
+            "render": function(data, type, full, meta) {
+               return Math.round((data.volretention / 60 / 60 / 24)) + ' dní';
+            }
+         },
+         {
+            "targets": 5,
+            "data": null,
+            "render": function(data, type, full, meta) {
+               return data.maxvoljobs;
             }
          },
          {
             "targets": 6,
+            "data": null,
             "render": function(data, type, full, meta) {
-               return formatBytes(data);
+               if(data.maxvolbytes == 0) return "-";
+                  var k = 1000;
+                  var units = ["B", "KB", "MB", "GB", "TB", "PB", "EB", "ZB"];
+                  var i = Math.floor(Math.log(data.maxvolbytes) / Math.log(k));
+                  return parseFloat((data.maxvolbytes / Math.pow(k, i)).toFixed(2)) + " " + units[i];
             }
          }
       ]
@@ -185,71 +259,181 @@ $(document).ready(function() {
    } );
 
    var tab_volumes = $('#volumes').DataTable( {
+
+                "language":    {
+                        "sEmptyTable":     "Nie sú k dispozícii žiadne dáta",
+                        "sInfo":           "Záznam _START_ až _END_ z celkom _TOTAL_",
+                        "sInfoEmpty":      "Záznam 0 až 0 z celkom 0 ",
+                        "sInfoFiltered":   "(vyfiltrované spomedzi _MAX_ záznamov)",
+                        "sInfoPostFix":    "",
+                        "sInfoThousands":  ",",
+                        "sLengthMenu":     "Zobraz _MENU_ záznamov",
+                        "sLoadingRecords": "Načítavam...",
+                        "sProcessing":     "Spracúvam...",
+                        "sSearch":         "Hľadať:",
+                        "sZeroRecords":    "Nenašli sa žiadne vyhovujúce záznamy",
+                        "oPaginate": {
+                                "sFirst":    "Prvá",
+                                "sLast":     "Posledná",
+                                "sNext":     "Nasledujúca",
+                                "sPrevious": "Predchádzajúca"
+                        },
+                        "oAria": {
+                                "sSortAscending":  ": aktivujte na zoradenie stĺpca vzostupne",
+                                "sSortDescending": ": aktivujte na zoradenie stĺpca zostupne"
+                        }
+                },
+
       "ajax": {
          "url": "<?php echo $this->url('pool', array('action' => 'getData'), null) . '?data=volumes&pool='.$this->pool; ?>",
          "dataSrc": ""
       },
       "columns": [
-         { "data": null, "orderable": false, "defaultContent": '', "className": 'details-control' },
-         { "data": "volumename" },
-         { "data": "storageid" },
-         { "data": "mediatype" },
-         { "data": "lastwritten" },
-         { "data": "volstatus" },
+         {
+            "className": 'details-control',
+            "data": null,
+            "orderable": false,
+            "defaultContent": ''
+         },
          { "data": null },
-         { "data": "maxvolbytes", "type": "file-size" },
-         { "data": "volbytes", "type": "file-size" },
-         { "data": null, "type": "file-size" },
-         { "data": "lastwritten" }
+         { "data": null },
+         { "data": null },
+         { "data": null },
+         { "data": null },
+         { "data": null },
+         { "data": null },
+         { "data": null },
+         { "data": null }
       ],
       "paging":   true,
       "ordering": true,
       "info":     true,
       "pagingType": "full_numbers",
       "stateSave": true,
-      "order": [[4, 'desc']],
       "columnDefs": [
          {
             "targets": 1,
+            "data": null,
             "render": function(data, type, full, meta) {
-               return '<a href="<?php echo $this->basePath() . '/media/details/'; ?>'+data+'">'+data+'</a>';
+               return '<a href="<?php echo $this->basePath() . '/media/details/'; ?>'+data.volumename+'">'+data.volumename+'</a>';
+            }
+         },
+         {
+            "targets": 2,
+            "data": null,
+            "render": function(data, type, full, meta) {
+               return data.storageid;
+            }
+         },
+         {
+            "targets": 3,
+            "data": null,
+            "render": function(data, type, full, meta) {
+               return data.mediatype;
             }
          },
          {
             "targets": 4,
-            "orderData": 10,
+            "data": null,
             "render": function(data, type, full, meta) {
-               return formatLastWritten(data);
+
+               if(data.lastwritten == null || data.lastwritten == "") {
+                  return 'never';
+               }
+               else {
+                  var d = Date.now() / 1000;
+                  var a = data.lastwritten.split(" ");
+                  var b = new Date(a[0]).getTime() / 1000;
+                  var interval = Math.floor( (d - b) / (3600 * 24) );
+
+                  if(interval < 1) {
+                     return '<span id="lastwritten" data-toggle="tooltip" title="' + data.lastwritten + '">dnes</span>';
+                  }
+                  else if(interval <= 31 && interval >= 1) {
+                     return '<span id="lastwritten" data-toggle="tooltip" title="' + data.lastwritten + '">' + interval + ' den(í) pred</span>';
+                  }
+                  else if(interval >= 31 && interval <= 365) {
+                     return '<span id="lastwritten" data-toggle="tooltip" title="' + data.lastwritten + '">' + Math.round(interval / 31) + ' mesiac(ov) pred</span>';
+                  }
+                  else if(interval > 365) {
+                     return '<span id="lastwritten" data-toggle="tooltip" title="' + data.lastwritten + '">' + Math.round(interval / 365) + ' rok(ov) pred</span>';
+                  }
+                  else {
+                     return data.lastwritten;
+                  }
+               }
+            }
+         },
+         {
+            "targets": 5,
+            "data": null,
+            "render": function(data, type, full, meta) {
+               return data.volstatus;
             }
          },
          {
             "targets": 6,
+            "data": null,
             "render": function(data, type, full, meta) {
-               return formatExpiration(data.volstatus, data.lastwritten, data.volretention);
+               if(data.volstatus == "Used" || data.volstatus == "Full") {
+                  if(data.lastwritten == null || data.lastwritten == "") {
+                     return '-';
+                  }
+                  else {
+                     var d = Date.now() / 1000;
+                     var a = data.lastwritten.split(" ");
+                     var b = new Date(a[0]).getTime() / 1000;
+                     var interval = (d - b) / (3600 * 24);
+                     var retention = Math.round(data.volretention / 60 / 60 / 24);
+                     var expiration = Math.round(retention - interval);
+                     if(expiration <= 0) {
+                        return '<span class="label label-danger">expirované</span>';
+                     }
+
+                     if(expiration > 0) {
+                        return '<span class="label label-warning">expiruje za ' + expiration  + ' dní</span>';
+                     }
+                  }
+               }
+               else {
+                  return Math.round((data.volretention / 60 / 60 / 24)) + ' dní';
+               }
             }
          },
          {
             "targets": 7,
+            "data": null,
             "render": function(data, type, full, meta) {
-               return formatBytes(data);
+               if(data.maxvolbytes == 0) return "-";
+               var k = 1000;
+               var units = ["B", "KB", "MB", "GB", "TB", "PB", "EB", "ZB"];
+               var i = Math.floor(Math.log(data.maxvolbytes) / Math.log(k));
+               return parseFloat((data.maxvolbytes / Math.pow(k, i)).toFixed(2)) + " " + units[i];
             }
          },
          {
             "targets": 8,
+            "data": null,
             "render": function(data, type, full, meta) {
-               return formatBytes(data);
+               if(data.volbytes == 0) return "0.00 B";
+               var k = 1000;
+               var units = ["B", "KB", "MB", "GB", "TB", "PB", "EB", "ZB"];
+               var i = Math.floor(Math.log(data.volbytes) / Math.log(k));
+               return parseFloat((data.volbytes / Math.pow(k, i)).toFixed(2)) + " " + units[i];
             }
          },
          {
             "targets": 9,
+            "data": null,
             "render": function(data, type, full, meta) {
-               return formatFreeBytes(data.maxvolbytes, data.volbytes);
+               if(data.maxvolbytes == null || data.maxvolbytes == 0) return "-";
+               if(data.volbytes == null || data.volbytes == 0) return "0.00 B";
+               var d = data.maxvolbytes - data.volbytes;
+               var k = 1000;
+               var units = ["B", "KB", "MB", "GB", "TB", "PB", "EB", "ZB"];
+               var i = Math.floor(Math.log(d) / Math.log(k));
+               return parseFloat((d / Math.pow(k, i)).toFixed(2)) + " " + units[i];
             }
-         },
-         {
-            "targets": 10,
-            "visible": false,
-            "searchable": false
          }
       ]
 
