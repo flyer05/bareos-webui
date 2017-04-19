@@ -85,14 +85,14 @@ class RestoreForm extends Form
       }
 */
 
-      // Backup jobs
+      // Zálohovacie úloghy
       if(isset($restore_params['jobid'])) {
          $this->add(array(
             'name' => 'backups',
             'type' => 'select',
             'options' => array(
-               'label' => 'Backup jobs',
-               //'empty_option' => 'Please choose a backup',
+               'label' => 'Zálohovacie úlohy',
+               //'empty_option' => 'Prosím vyberte zálohu',
                'value_options' => $this->getBackupList()
             ),
             'attributes' => array(
@@ -108,8 +108,8 @@ class RestoreForm extends Form
             'name' => 'backups',
             'type' => 'select',
             'options' => array(
-               'label' => 'Backups',
-               //'empty_option' => 'Please choose a backup',
+               'label' => 'Zálohy',
+               //'empty_option' => 'Prosím vyberte zálohu',
                'value_options' => $this->getBackupList()
             ),
             'attributes' => array(
@@ -127,8 +127,8 @@ class RestoreForm extends Form
                'name' => 'client',
                'type' => 'select',
                'options' => array(
-                  'label' => 'Client',
-                  //'empty_option' => 'Please choose a client',
+                  'label' => 'Klient',
+                  //'empty_option' => 'Prosím vyberte klienta',
                   'value_options' => $this->getClientList()
                ),
                'attributes' => array(
@@ -144,8 +144,8 @@ class RestoreForm extends Form
                'name' => 'client',
                'type' => 'select',
                'options' => array(
-                  'label' => 'Client',
-                  //'empty_option' => 'Please choose a client',
+                  'label' => 'Klient',
+                  //'empty_option' => 'Prosím vyberte klienta',
                   'value_options' => $this->getClientList()
                ),
                'attributes' => array(
@@ -162,8 +162,8 @@ class RestoreForm extends Form
             'name' => 'client',
             'type' => 'select',
             'options' => array(
-               'label' => 'Client',
-               //'empty_option' => 'Please choose a client',
+               'label' => 'Klient',
+               //'empty_option' => 'Prosím vyberte klienta',
                'value_options' => $this->getClientList()
             ),
             'attributes' => array(
@@ -181,8 +181,8 @@ class RestoreForm extends Form
             'name' => 'restoreclient',
             'type' => 'select',
             'options' => array(
-               'label' => 'Restore to (another) client',
-               //'empty_option' => 'Please choose a client',
+               'label' => 'Obnoviť na (iného) klienta',
+               //'empty_option' => 'Prosím vyberte klienta',
                'value_options' => $this->getClientList()
             ),
             'attributes' => array(
@@ -198,8 +198,8 @@ class RestoreForm extends Form
             'name' => 'restoreclient',
             'type' => 'select',
             'options' => array(
-               'label' => 'Restore to (another) client',
-               //'empty_option' => 'Please choose a client',
+               'label' => 'Obnoviť na (iného) klienta',
+               //'empty_option' => 'Prosím vyberte klienta',
                'value_options' => $this->getClientList()
             ),
             'attributes' => array(
@@ -215,8 +215,8 @@ class RestoreForm extends Form
             'name' => 'restoreclient',
             'type' => 'select',
             'options' => array(
-               'label' => 'Restore to (another) client',
-               //'empty_option' => 'Please choose a client',
+               'label' => 'Obnoviť na (iného) klienta',
+               //'empty_option' => 'Prosím vyberte klienta',
                'value_options' => $this->getClientList()
             ),
             'attributes' => array(
@@ -233,8 +233,8 @@ class RestoreForm extends Form
             'name' => 'fileset',
             'type' => 'select',
             'options' => array(
-               'label' => 'Fileset',
-               'empty_option' => 'Please choose a fileset',
+               'label' => 'Súborový set',
+               'empty_option' => 'Prosím vyberte súborový set',
                'value_options' => $this->getFilesetList()
             ),
             'attributes' => array(
@@ -248,8 +248,8 @@ class RestoreForm extends Form
             'name' => 'fileset',
             'type' => 'select',
             'options' => array(
-               'label' => 'Fileset',
-               'empty_option' => 'Please choose a fileset',
+               'label' => 'Súborový set',
+               'empty_option' => 'Prosím vyberte súborový set',
                'value_options' => $this->getFilesetList()
             ),
             'attributes' => array(
@@ -265,7 +265,7 @@ class RestoreForm extends Form
             'type' => 'select',
             'options' => array(
                'label' => 'Restore job',
-               //'empty_option' => 'Please choose a restore job',
+               //'empty_option' => 'Prosím vyberte dzob obnovenia',
                'value_options' => $this->getRestoreJobList()
             ),
             'attributes' => array(
@@ -282,7 +282,7 @@ class RestoreForm extends Form
                'name' => 'restorejob',
                'type' => 'select',
                'options' => array(
-                  'label' => 'Restore job',
+                  'label' => 'Obnoviť úlohu',
                   //'empty_option' => 'Please choose a restore job',
                   'value_options' => $this->getRestoreJobList()
                ),
@@ -299,7 +299,7 @@ class RestoreForm extends Form
                'name' => 'restorejob',
                'type' => 'select',
                'options' => array(
-                  'label' => 'Restore job',
+                  'label' => 'Obnoviť úlohu',
                   //'empty_option' => 'Please choose a restore job',
                   'value_options' => $this->getRestoreJobList()
                ),
@@ -318,10 +318,10 @@ class RestoreForm extends Form
             'name' => 'mergefilesets',
             'type' => 'select',
             'options' => array(
-               'label' => 'Merge all client filesets?',
+               'label' => 'Zlúčiť všetky súborové sety na klientovi?',
                'value_options' => array(
-                     '0' => 'Yes',
-                     '1' => 'No'
+                     '0' => 'Áno',
+                     '1' => 'Nie'
                   )
                ),
             'attributes' => array(
@@ -337,10 +337,10 @@ class RestoreForm extends Form
             'name' => 'mergefilesets',
             'type' => 'select',
             'options' => array(
-               'label' => 'Merge all client filesets?',
+               'label' => 'Zlúčiť všetky súborové sety na klientovi?',
                'value_options' => array(
-                     '0' => 'Yes',
-                     '1' => 'No'
+                     '0' => 'Áno',
+                     '1' => 'Nie'
                   )
                ),
             'attributes' => array(
@@ -358,10 +358,10 @@ class RestoreForm extends Form
             'name' => 'mergejobs',
             'type' => 'select',
             'options' => array(
-               'label' => 'Merge all related jobs to last full backup of selected backup job?',
+               'label' => 'Zlúčiť všetky súvisiace úlohy na poslednú úplnú zálohu zvolenej zálohovacej úlohy?',
                'value_options' => array(
-                     '0' => 'Yes',
-                     '1' => 'No'
+                     '0' => 'Áno',
+                     '1' => 'Nie'
                   )
                ),
             'attributes' => array(
@@ -379,8 +379,8 @@ class RestoreForm extends Form
             'options' => array(
                'label' => 'Merge jobs?',
                'value_options' => array(
-                     '0' => 'Yes',
-                     '1' => 'No'
+                     '0' => 'Áno',
+                     '1' => 'Nie'
                   )
                ),
             'attributes' => array(
@@ -397,18 +397,18 @@ class RestoreForm extends Form
          'name' => 'replace',
          'type' => 'select',
          'options' => array(
-            'label' => 'Replace files on client?',
+            'label' => 'Nahradiť súbory na klientovi?',
             'value_options' => array(
-                  'always' => 'always',
-                  'never' => 'never',
-                  'ifolder' => 'if older',
-                  'ifnewer' => 'if newer'
+                  'always' => 'vždy',
+                  'never' => 'nikdy',
+                  'ifolder' => 'ak sú staršie',
+                  'ifnewer' => 'ak sú novšie'
                )
             ),
          'attributes' => array(
                'class' => 'form-control selectpicker show-tick',
                'id' => 'replace',
-               'value' => 'never'
+               'value' => 'nikdy'
             )
          )
       );
@@ -418,7 +418,7 @@ class RestoreForm extends Form
          'name' => 'where',
          'type' => 'text',
          'options' => array(
-            'label' => 'Restore location on client'
+            'label' => 'Obnoviť miesto na klientovi'
             ),
          'attributes' => array(
             'class' => 'form-control selectpicker show-tick',
@@ -446,7 +446,7 @@ class RestoreForm extends Form
          'name' => 'jobids_display',
          'type' => 'text',
          'options' => array(
-            'label' => 'Related jobs for a most recent full restore'
+            'label' => 'Súvisiace úlohy po poslednom úplnom obnovení'
             ),
          'attributes' => array(
             'value' => $this->getJobIds(),
@@ -483,7 +483,7 @@ class RestoreForm extends Form
          'name' => 'submit',
          'type' => 'submit',
          'attributes' => array(
-            'value' => 'Restore',
+            'value' => 'Obnoviť',
             'id' => 'submit'
          )
       ));
