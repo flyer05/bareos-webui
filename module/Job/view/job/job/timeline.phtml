@@ -24,7 +24,7 @@
  *
  */
 
-$title = 'Job timeline';
+$title = 'Úlohy - Časová OS';
 $this->headTitle($title);
 
 ?>
@@ -33,12 +33,12 @@ $this->headTitle($title);
 <hr />
 
 <ul class="nav nav-tabs">
-   <li><a href="<?php echo $this->url('job', array('action'=>'index')); ?>"><?php echo $this->translate('Overview'); ?></a></li>
-   <li><a href="<?php echo $this->url('job', array('action'=>'running')); ?>"><?php echo $this->translate('Running'); ?></a></li>
-   <li><a href="<?php echo $this->url('job', array('action'=>'waiting')); ?>"><?php echo $this->translate('Waiting'); ?></a></li>
-   <li><a href="<?php echo $this->url('job', array('action'=>'unsuccessful')); ?>"><?php echo $this->translate('Unsuccessful'); ?></a></li>
-   <li><a href="<?php echo $this->url('job', array('action'=>'successful')); ?>"><?php echo $this->translate('Successful'); ?></a></li>
-   <li class="active"><a href="<?php echo $this->url('job', array('action'=>'timeline')); ?>"><?php echo $this->translate('Timeline'); ?></a></li>
+   <li><a href="<?php echo $this->url('job', array('action'=>'index')); ?>"><?php echo $this->translate('Prehľad'); ?></a></li>
+   <li><a href="<?php echo $this->url('job', array('action'=>'running')); ?>"><?php echo $this->translate('Beží'); ?></a></li>
+   <li><a href="<?php echo $this->url('job', array('action'=>'waiting')); ?>"><?php echo $this->translate('Čaká'); ?></a></li>
+   <li><a href="<?php echo $this->url('job', array('action'=>'unsuccessful')); ?>"><?php echo $this->translate('Nekompletné'); ?></a></li>
+   <li><a href="<?php echo $this->url('job', array('action'=>'successful')); ?>"><?php echo $this->translate('Kompletné'); ?></a></li>
+   <li class="active"><a href="<?php echo $this->url('job', array('action'=>'timeline')); ?>"><?php echo $this->translate('Časová os'); ?></a></li>
 </ul>
 
 <br />

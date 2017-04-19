@@ -24,14 +24,14 @@
  *
  */
 
-$title = 'Jobs';
+$title = 'Úlohy';
 $this->headTitle($title);
 
 ?>
 
 <ul class="nav nav-tabs">
-   <li class="active"><a href="<?php echo $this->url('job', array('action'=>'index')); ?>"><?php echo $this->translate('Overview'); ?></a></li>
-   <li><a href="<?php echo $this->url('job', array('action'=>'run')); ?>"><?php echo $this->translate('Run'); ?></a></li>
+   <li class="active"><a href="<?php echo $this->url('job', array('action'=>'index')); ?>"><?php echo $this->translate('Prehľad'); ?></a></li>
+   <li><a href="<?php echo $this->url('job', array('action'=>'run')); ?>"><?php echo $this->translate('Spustiť'); ?></a></li>
 </ul>
 
 <br />
@@ -57,7 +57,7 @@ $this->headTitle($title);
 <div class="panel panel-default">
 
 <div class="panel-heading">
-<h3 class="panel-title">Overview</h3>
+<h3 class="panel-title">Prehľad</h3>
 </div>
 
 <div class="panel-body">
@@ -66,16 +66,17 @@ $this->headTitle($title);
 
 <thead class="bg-primary">
    <th></th>
-   <th><?php echo $this->translate("Job"); ?></th>
-   <th><?php echo $this->translate("Name"); ?></th>
-   <th><?php echo $this->translate("Client"); ?></th>
-   <th><?php echo $this->translate("Type"); ?></th>
-   <th><?php echo $this->translate("Level"); ?></th>
-   <th><?php echo $this->translate("Files"); ?></th>
-   <th><?php echo $this->translate("Bytes"); ?></th>
-   <th><?php echo $this->translate("Errors"); ?></th>
-   <th><?php echo $this->translate("Status"); ?></th>
-   <th><?php echo $this->translate("Actions"); ?></th>
+   <th><?php echo $this->translate("Úloha"); ?></th>
+   <th><?php echo $this->translate("Meno"); ?></th>
+   <th><?php echo $this->translate("Klient"); ?></th>
+   <th><?php echo $this->translate("Typ"); ?></th>
+   <th><?php echo $this->translate("Úroveň"); ?></th>
+   <th><?php echo $this->translate("Začiatok"); ?></th>
+   <th><?php echo $this->translate("Koniec"); ?></th>
+   <!--<th><?php echo $this->translate("Súborov"); ?></th>-->
+   <!--<th><?php echo $this->translate("Veľkosť"); ?></th>-->
+   <th><?php echo $this->translate("Stav"); ?></th>
+   <th><?php echo $this->translate("Akcie"); ?></th>
 </thead>
 
 </table>
@@ -87,8 +88,6 @@ $this->headTitle($title);
 
 <?php
    echo $this->headScript()->prependFile($this->basePath() . '/js/jquery.dataTables.min.js');
-   echo $this->headScript()->prependFile($this->basePath() . '/js/dataTables.plugins.js');
-   echo $this->headScript()->prependFile($this->basePath() . '/js/dataTables.functions.js');
    echo $this->headScript()->prependFile($this->basePath() . '/js/dataTables.bootstrap.min.js');
    echo $this->headLink()->prependStylesheet($this->basePath() . '/css/dataTables.bootstrap.min.css');
 ?>
@@ -98,16 +97,16 @@ $this->headTitle($title);
   <div class="modal-dialog modal-md">
     <div class="modal-content">
    <div class="modal-header">
-   <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
-   <h4 class="modal-title" id="myModalLabel">Failed to retrieve data from Bareos director</h4>
+   <button type="button" class="close" data-dismiss="modal" aria-label="Zavrieť"><span aria-hidden="true">&times;</span></button>
+   <h4 class="modal-title" id="myModalLabel">Nepodarilo sa načítať dáta z riadiaceho servera Bareos</h4>
       </div>
       <div class="modal-body">
-   <p>Please try to reduce the amount of data to display, e.g. reduce time period.</p>
-   <p>Error message received from director:</p>
-   <p class="text-danger">Failed to send result as json. Maybe result message to long?</p>
+   <p>Prosím, pokúste sa znížiť množstvo dát, ktoré sa zobrazia, napr. skrátiť časový interval.</p>
+   <p>Prijatá chybová spráava z riadiaceho servera(správcu):</p>
+   <p class="text-danger">Nepodarilo sa odoslať výsledok ako JSON. Možno je výsledná správa príliš dlhá?</p>
       </div>
       <div class="modal-footer">
-   <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+   <button type="button" class="btn btn-default" data-dismiss="modal">Zavrieť</button>
       </div>
     </div>
   </div>
@@ -134,14 +133,28 @@ tr.shown td.details-control:after {
 
 function format( d ) {
 
+   if(d.jobbytes == 0) {
+      var b = "-";
+   }
+   else {
+      var k = 1000;
+      var units = ["B", "KB", "MB", "GB", "TB", "PB", "EB", "ZB"];
+      var i = Math.floor(Math.log(d.jobbytes) / Math.log(k));
+      var b = parseFloat((d.jobbytes / Math.pow(k, i)).toFixed(2)) + " " + units[i];
+   }
+
    return '<table class="table table-bordered">'+
       '<tr>'+
-      '<th>Start</th>'+
-      '<td>'+ d.starttime +'</td>'+
+      '<th>Súbory</th>'+
+      '<td>'+ d.jobfiles +'</td>'+
       '</tr>'+
       '<tr>'+
-      '<th>End</th>'+
-      '<td>'+ d.endtime +'</td>'+
+      '<th>Veľkosť</th>'+
+      '<td>'+ b +'</td>'+
+      '</tr>'+
+      '<tr>'+
+      '<th>Chyby</th>'+
+      '<td>'+ d.joberrors +'</td>'+
       '</tr>'+
       '</table>';
 
@@ -175,79 +188,316 @@ function updateQueryParams(k, v)
 $(document).ready(function() {
 
    var table = $('#jobtable').DataTable( {
+	   
+	                   "language":    {
+                        "sEmptyTable":     "Nie sú k dispozícii žiadne dáta",
+                        "sInfo":           "Záznam _START_ až _END_ z celkom _TOTAL_",
+                        "sInfoEmpty":      "Záznam 0 až 0 z celkom 0 ",
+                        "sInfoFiltered":   "(vyfiltrované spomedzi _MAX_ záznamov)",
+                        "sInfoPostFix":    "",
+                        "sInfoThousands":  ",",
+                        "sLengthMenu":     "Zobraz _MENU_ záznamov",
+                        "sLoadingRecords": "Načítavam...",
+                        "sProcessing":     "Spracúvam...",
+                        "sSearch":         "Hľadať:",
+						"sStatus":         "Stav",
+                        "sZeroRecords":    "Nenašli sa žiadne vyhovujúce záznamy",
+                        "oPaginate": {
+                                "sFirst":    "Prvá",
+                                "sLast":     "Posledná",
+                                "sNext":     "Nasledujúca",
+                                "sPrevious": "Predchádzajúca"
+                        },
+                        "oAria": {
+                                "sSortAscending":  ": aktivujte na zoradenie stĺpca vzostupne",
+                                "sSortDescending": ": aktivujte na zoradenie stĺpca zostupne"
+                        }
+                },
+				
       "ajax": {
          "url": "<?php echo $this->url('job', array('action' => 'getData'), null) . '?data=jobs&status='.$this->status.'&period='.$this->period; ?>",
          "dataSrc": ""
       },
       "columns": [
-         { "data": null, "orderable": false, "defaultContent": "", "className": "details-control" },
-         { "data": "jobid" },
-         { "data": "name" },
-         { "data": "client" },
-         { "data": "type" },
-         { "data": "level" },
-         { "data": "jobfiles" },
-         { "data": "jobbytes", "type": "file-size" },
-         { "data": "joberrors" },
-         { "data": "jobstatus" },
-         { "data": null, "orderable": false }
+         {
+            "className": 'details-control',
+            "data": null,
+            "orderable": false,
+            "defaultContent": ''
+         },
+         { "data": null },
+         { "data": null },
+         { "data": null },
+         { "data": null },
+         { "data": null },
+         { "data": null },
+         { "data": null },
+         //{ "data": null },
+         //{ "data": null },
+         { "data": null },
+         {
+            "orderable": false,
+            "data": null
+         }
       ],
       "paging":   true,
       "ordering": true,
       "info":     true,
       "pagingType": "full_numbers",
       "stateSave": true,
-      "order": [[1, 'desc']],
       "columnDefs": [
          {
             "targets": 1,
+            "data": null,
             "render": function(data, type, full, meta) {
-               return '<a href="<?php echo $this->basePath() . '/job/details/'; ?>'+data+'">'+data+'</a>';
+               return '<a href="<?php echo $this->basePath() . '/job/details/'; ?>'+data.jobid+'">'+data.jobid+'</a>';
+            }
+         },
+         {
+            "targets": 2,
+            "data": null,
+            "render": function(data, type, full, meta) {
+               return data.name;
             }
          },
          {
             "targets": 3,
+            "data": null,
             "render": function(data, type, full, meta) {
-               return '<a href="<?php echo $this->basePath() . '/client/details/'; ?>'+data+'">'+data+'</a>';
+               return '<a href="<?php echo $this->basePath() . '/client/details/'; ?>'+data.client+'">'+data.client+'</a>';
             }
          },
          {
             "targets": 4,
+            "data": null,
             "render": function(data, type, full, meta) {
-               return formatJobType(data);
+               var output;
+               switch(data.type) {
+                  case 'B':
+                     output = 'Záloha';
+                     break;
+                  case 'M':
+                     output = 'Migrated';
+                     break;
+                  case 'V':
+                     output = 'Verify';
+                     break;
+                  case 'R':
+                     output = 'Restore';
+                     break;
+                  case 'U':
+                     output = 'Console program';
+                     break;
+                  case 'I':
+                     output = 'Internal system job';
+                     break;
+                  case 'D':
+                     output = 'Admin';
+                     break;
+                  case 'A':
+                     output = 'Archive';
+                     break;
+                  case 'C':
+                     output = 'Copy of a job';
+                     break;
+                  case 'c':
+                     output = 'Copy job';
+                     break;
+                  case 'g':
+                     output = 'Migration job';
+                     break;
+                  case 'S':
+                     output = 'Scan';
+                     break;
+                  default:
+                     output = data.type;
+                     break;
+               }
+               return output;
             }
          },
          {
             "targets": 5,
+            "data": null,
             "render": function(data, type, full, meta) {
-               return formatJobLevel(data);
+               switch(data.level) {
+                  case 'F':
+                     return 'Plná záloha';
+                  case 'D':
+                     return 'Rozdielová';
+                  case 'I':
+                     return 'Prírastková';
+                  default:
+                     return data.level;
+               }
+            }
+         },
+         {
+            "targets": 6,
+            "data": null,
+            "render": function(data, type, full, meta) {
+               return data.starttime;
             }
          },
          {
             "targets": 7,
+            "data": null,
             "render": function(data, type, full, meta) {
-               return formatBytes(data);
+               return data.endtime;
+            }
+         },
+         /*{
+            "targets": 7,
+            "data": null,
+            "render": function(data, type, full, meta) {
+               return data.jobfiles;
             }
          },
          {
-            "targets": 9,
+            "targets": 8,
+            "data": null,
             "render": function(data, type, full, meta) {
-               return formatJobStatus(data);
+               if(data.jobbytes == 0) return "0.00 B";
+               var k = 1000;
+               var units = ["B", "KB", "MB", "GB", "TB", "PB", "EB", "ZB"];
+               var i = Math.floor(Math.log(data.jobbytes) / Math.log(k));
+               return parseFloat((data.jobbytes / Math.pow(k, i)).toFixed(2)) + " " + units[i];
+            }
+         },*/
+         {
+            "targets": 8,
+            "data": null,
+            "render": function(data, type, full, meta) {
+
+               var output;
+
+               switch(data.jobstatus) {
+                  // Non-fatal error
+                  case 'e':
+                     output = '<span class="label label-danger">Zlyhala</span>';
+                     break;
+                  // Terminated with errors
+                  case 'E':
+                     output = '<span class="label label-danger">Zlyhala</span>';
+                     break;
+                  // Fatal error
+                  case 'f':
+                     output = '<span class="label label-danger">Zlyhala</span>';
+                     break;
+                  // Terminated successful
+                  case 'T':
+                     output = '<span class="label label-success">Hotovo</span>';
+                     break;
+                  // Running
+                  case 'R':
+                     output = '<span class="label label-info">Beží</span>';
+                     break;
+                  // Created no yet running
+                  case 'C':
+                     output = '<span class="label label-default">V queue</span>';
+                     break;
+                  // Blocked
+                  case 'B':
+                     output = '<span class="label label-warning">Blokovaná</span>';
+                     break;
+                  // Verify found differences
+                  case 'D':
+                     output = '<span class="label label-warning">Skontrolujte nájdené rozdiely</span>';
+                     break;
+                  // Canceled by user
+                  case 'A':
+                     output = '<span class="label label-warning">Zrušená</span>';
+                     break;
+                  // Waiting for client
+                  case 'F':
+                     output = '<span class="label label-default">Čaká</span>';
+                     break;
+                  // Waiting for storage daemon
+                  case 'S':
+                     output = '<span class="label label-default">Čaká</span>';
+                     break;
+                  // Waiting for new media
+                  case 'm':
+                     output = '<span class="label label-default">Čaká</span>';
+                     break;
+                  // Waiting for media mount
+                  case 'M':
+                     output = '<span class="label label-default">Čaká</span>';
+                     break;
+                  // Waiting for storage resource
+                  case 's':
+                     output = '<span class="label label-default">Čaká</span>';
+                     break;
+                  // Waiting for job resource
+                  case 'j':
+                     output = '<span class="label label-default">Čaká</span>';
+                     break;
+                  // Waiting for client resource
+                  case 'c':
+                     output = '<span class="label label-default">Čaká</span>';
+                     break;
+                  // Waiting on maximum jobs
+                  case 'd':
+                     output = '<span class="label label-default">Čaká</span>';
+                     break;
+                  // Waiting on starttime
+                  case 't':
+                     output = '<span class="label label-default">Čaká</span>';
+                     break;
+                  // Waiting on higher priority jobs
+                  case 'p':
+                     output = '<span class="label label-default">Čaká</span>';
+                     break;
+                  // SD despooling attributes
+                  case 'a':
+                     output = '<span class="label label-info">SD despooling attributes</span>';
+                     break;
+                  // Doing batch insert file records
+                  case 'i':
+                     output = '<span class="label label-info">Vykonávam dávkové vkladanie súborových záznamov</span>';
+                     break;
+                  // Incomplete
+                  case 'I':
+                     output = '<span class="label label-primary">Nekompletná</span>';
+                     break;
+                  // Committing data
+                  case 'L':
+                     output = '<span class="label label-info">Zapisujem dáta</span>';
+                     break;
+                  // Terminated with warnings
+                  case 'W':
+                     output = '<span class="label label-warning">Varovanie</span>';
+                     break;
+                  // Doing data despooling
+                  case 'l':
+                     output = '<span class="label label-info">Vykonávam dátový rozklad</span>';
+                     break;
+                  // Queued waiting for device
+                  case 'q':
+                     output = '<span class="label label-default">Čaká na zariadenie v queue</span>';
+                     break;
+                  // Default
+                  default:
+                     output = '<span class="label label-primary">' + data.jobStatus + '</span>';
+                     break;
+               }
+
+               return output;
             }
 
          },
          {
-            "targets": 10,
+            "targets": 9,
+            "data": null,
             "render": function(data, type, full, meta) {
                if(data.type == 'B') {
                   switch(data.jobstatus) {
                      case 'T':
-                     case 'W':
                      case 'E':
                      case 'e':
                      case 'f':
                      case 'A':
-                        return '<a class="btn btn-default btn-xs" data-toggle="tooltip" data-placement="top" href="<?php echo $this->basePath() . '/job/rerun/'; ?>'+data.jobid+'" title="Rerun" id="btn-1"><span class="glyphicon glyphicon-repeat"></span></a>';
+                        return '<a class="btn btn-default btn-xs" data-toggle="tooltip" data-placement="top" href="<?php echo $this->basePath() . '/job/rerun/'; ?>'+data.jobid+'" title="Opakovať" id="btn-1"><span class="glyphicon glyphicon-repeat"></span></a>';
                      case 'F':
                      case 'S':
                      case 'm':
@@ -262,7 +512,7 @@ $(document).ready(function() {
                      case 'C':
                      case 'R':
                      case 'l':
-                        return '<a class="btn btn-default btn-xs" data-toggle="tooltip" data-placement="top" href="<?php echo $this->basePath() . '/job/cancel/'; ?>'+data.jobid+'" title="Cancel" id="btn-1"><span class="glyphicon glyphicon-trash"></span></a>';
+                        return '<a class="btn btn-default btn-xs" data-toggle="tooltip" data-placement="top" href="<?php echo $this->basePath() . '/job/cancel/'; ?>'+data.jobid+'" title="Zrušiť" id="btn-1"><span class="glyphicon glyphicon-trash"></span></a>';
                   }
                }
                return '';

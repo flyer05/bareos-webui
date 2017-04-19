@@ -24,14 +24,14 @@
  *
  */
 
-$title = 'Jobs';
+$title = 'Úlohy';
 $this->headTitle($title);
 
 ?>
 
 <ul class="nav nav-tabs">
-   <li><a href="<?php echo $this->url('job', array('action'=>'index')); ?>"><?php echo $this->translate('Overview'); ?></a></li>
-   <li class="active"><a href="<?php echo $this->url('job', array('action'=>'run')); ?>"><?php echo $this->translate('Run'); ?></a></li>
+   <li><a href="<?php echo $this->url('job', array('action'=>'index')); ?>"><?php echo $this->translate('Prehľad'); ?></a></li>
+   <li class="active"><a href="<?php echo $this->url('job', array('action'=>'run')); ?>"><?php echo $this->translate('Spustiť'); ?></a></li>
 </ul>
 
 <br />
@@ -43,15 +43,15 @@ $this->headTitle($title);
 <div class="panel panel-default">
 
 <div class="panel-heading">
-<h3 class="panel-title">Run jobs</h3>
+<h3 class="panel-title">Spustiť Úlohy</h3>
 </div>
 
 <div class="panel-body">
 
 <table class="table table-hover" id="backupjobs">
    <thead class="bg-primary">
-      <th><?php echo $this->translate("Name"); ?></th>
-      <th><?php echo $this->translate("Actions"); ?></th>
+      <th><?php echo $this->translate("Meno"); ?></th>
+      <th><?php echo $this->translate("Akcie"); ?></th>
    </thead>
 </table>
 
@@ -69,6 +69,31 @@ $this->headTitle($title);
 <script>
 
    $('#backupjobs').DataTable( {
+	   
+	   	                   "language":    {
+                        "sEmptyTable":     "Nie sú k dispozícii žiadne dáta",
+                        "sInfo":           "Záznam _START_ až _END_ z celkom _TOTAL_",
+                        "sInfoEmpty":      "Záznam 0 až 0 z celkom 0 ",
+                        "sInfoFiltered":   "(vyfiltrované spomedzi _MAX_ záznamov)",
+                        "sInfoPostFix":    "",
+                        "sInfoThousands":  ",",
+                        "sLengthMenu":     "Zobraz _MENU_ záznamov",
+                        "sLoadingRecords": "Načítavam...",
+                        "sProcessing":     "Spracúvam...",
+                        "sSearch":         "Hľadať:",
+						"sStatus":         "Stav",
+                        "sZeroRecords":    "Nenašli sa žiadne vyhovujúce záznamy",
+                        "oPaginate": {
+                                "sFirst":    "Prvá",
+                                "sLast":     "Posledná",
+                                "sNext":     "Nasledujúca",
+                                "sPrevious": "Predchádzajúca"
+                        },
+                        "oAria": {
+                                "sSortAscending":  ": aktivujte na zoradenie stĺpca vzostupne",
+                                "sSortDescending": ": aktivujte na zoradenie stĺpca zostupne"
+                        }
+                },
       "ajax": {
          "url": "<?php echo $this->url('job', array('action' => 'getData'), null) . '?data=backupjobs'; ?>",
          "dataSrc": ""
@@ -87,7 +112,6 @@ $this->headTitle($title);
       "info":     true,
       "pagingType": "full_numbers",
       "stateSave": true,
-      "order": [[0, 'asc']],
       "columnDefs": [
          {
             "targets": 0,
@@ -100,7 +124,7 @@ $this->headTitle($title);
             "targets": 1,
             "data": null,
             "render": function(data, type, full, meta) {
-               return '<a href="<?php echo $this->basePath() . '/job/queue?job='; ?>'+data.name+'"><button type="button" class="btn btn-default btn-xs" id="btn-1" data-toggle="tooltip" data-placement="top" title="Run"><span class="glyphicon glyphicon-play-circle"></span></button></a>';
+               return '<a href="<?php echo $this->basePath() . '/job/queue?job='; ?>'+data.name+'"><button type="button" class="btn btn-default btn-xs" id="btn-1" data-toggle="tooltip" data-placement="top" title="Spustiť"><span class="glyphicon glyphicon-play-circle"></span></button></a>';
             }
          }
       ]

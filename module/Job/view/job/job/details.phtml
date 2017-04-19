@@ -24,7 +24,7 @@
  *
  */
 
-$title = 'Job details';
+$title = 'Detaily Úlohy';
 $this->headTitle($title);
 
 ?>
@@ -37,7 +37,7 @@ $this->headTitle($title);
 <div class="panel panel-default">
 
 <div class="panel-heading">
-<h3 class="panel-title">Job</h3>
+<h3 class="panel-title">Úloha</h3>
 </div>
 
 <div class="panel-body">
@@ -45,13 +45,13 @@ $this->headTitle($title);
 <table class="table table-hover" id="jobdetails1">
 
 <thead class="bg-primary">
-   <th>Job</th>
-   <th>Name</th>
-   <th>Client</th>
-   <th>Fileset</th>
-   <th>Type</th>
-   <th>Level</th>
-   <th>Pool</th>
+   <th>Úloha</th>
+   <th>Názov</th>
+   <th>Klient</th>
+   <th>Súborový set</th>
+   <th>Typ</th>
+   <th>Úroveň</th>
+   <th>Skupina</th>
 </thead>
 
 </table>
@@ -59,10 +59,10 @@ $this->headTitle($title);
 <table class="table table-hover" id="jobdetails2">
 
 <thead class="bg-primary">
-   <th>Scheduled start</th>
-   <th>Real start</th>
-   <th>End</th>
-   <th>Real end</th>
+   <th>Plánovaný štart</th>
+   <th>Reálny štart</th>
+   <th>Koniec</th>
+   <th>Reálny koniec</th>
 </thead>
 
 </table>
@@ -70,10 +70,10 @@ $this->headTitle($title);
 <table class="table table-hover" id="jobdetails3">
 
 <thead class="bg-primary">
-   <th>Files</th>
-   <th>Bytes</th>
-   <th>Errors</th>
-   <th>Status</th>
+   <th>Súborov</th>
+   <th>Veľkosť</th>
+   <th>Chýb</th>
+   <th>Stav</th>
 </thead>
 
 </table>
@@ -91,7 +91,7 @@ $this->headTitle($title);
 <div class="panel panel-default">
 
 <div class="panel-heading">
-<h3 class="panel-title">Messages</h3>
+<h3 class="panel-title">Správy</h3>
 </div>
 
 <div class="panel-body">
@@ -99,8 +99,8 @@ $this->headTitle($title);
 <table class="table table-hover" id="joblog">
 
    <thead class="bg-primary">
-      <th>Timestamp</th>
-      <th>Message</th>
+      <th>Časová značka</th>
+      <th>Správa</th>
    </thead>
 
 </table>
@@ -122,122 +122,43 @@ $this->headTitle($title);
 $(document).ready(function() {
 
    var jobdetails1 = $('#jobdetails1').DataTable( {
+	   
+	      	                   "language":    {
+                        "sEmptyTable":     "Nie sú k dispozícii žiadne dáta",
+                        "sInfo":           "Záznam _START_ až _END_ z celkom _TOTAL_",
+                        "sInfoEmpty":      "Záznam 0 až 0 z celkom 0 ",
+                        "sInfoFiltered":   "(vyfiltrované spomedzi _MAX_ záznamov)",
+                        "sInfoPostFix":    "",
+                        "sInfoThousands":  ",",
+                        "sLengthMenu":     "Zobraz _MENU_ záznamov",
+                        "sLoadingRecords": "Načítavam...",
+                        "sProcessing":     "Spracúvam...",
+                        "sSearch":         "Hľadať:",
+						"sStatus":         "Stav",
+                        "sZeroRecords":    "Nenašli sa žiadne vyhovujúce záznamy",
+                        "oPaginate": {
+                                "sFirst":    "Prvá",
+                                "sLast":     "Posledná",
+                                "sNext":     "Nasledujúca",
+                                "sPrevious": "Predchádzajúca"
+                        },
+                        "oAria": {
+                                "sSortAscending":  ": aktivujte na zoradenie stĺpca vzostupne",
+                                "sSortDescending": ": aktivujte na zoradenie stĺpca zostupne"
+                        }
+                },
+				
       "ajax": {
          "url": "<?php echo $this->url('job', array('action' => 'getData'), null) . '?data=details&jobid='.$this->jobid; ?>",
          "dataSrc": ""
       },
       "columns": [
-         { "data": "jobid" },
-         { "data": "name" },
-         { "data": "client" },
-         { "data": "fileset" },
-         { "data": "type" },
-         { "data": "level" },
-         { "data": "poolname" }
-      ],
-      "paging":   false,
-      "ordering": false,
-      "info":     false,
-      "pagingType": "full_numbers",
-      "stateSave": true,
-      "bFilter": false,
-      "columnDefs": [
-         {
-            "targets": 4,
-            "render": function(data, type, full, meta) {
-               var output;
-               switch(data) {
-                  case 'B':
-                      output = 'Backup';
-                      break;
-                  case 'M':
-                      output = 'Migrated';
-                      break;
-                  case 'V':
-                      output = 'Verify';
-                      break;
-                  case 'R':
-                      output = 'Restore';
-                      break;
-                  case 'U':
-                      output = 'Console program';
-                      break;
-                  case 'I':
-                      output = 'Internal system job';
-                      break;
-                  case 'D':
-                      output = 'Admin';
-                      break;
-                  case 'A':
-                      output = 'Archive';
-                      break;
-                  case 'C':
-                      output = 'Copy of a job';
-                      break;
-                  case 'c':
-                      output = 'Copy job';
-                      break;
-                  case 'g':
-                      output = 'Migration job';
-                      break;
-                  case 'S':
-                      output = 'Scan';
-                      break;
-                  default:
-                      output = data;
-                      break;
-               }
-               return output;
-            }
-         },
-         {
-            "targets": 5,
-            "render": function(data, type, full, meta) {
-               switch(data) {
-                  case 'F':
-                     return 'Full';
-                  case 'D':
-                     return 'Differential';
-                  case 'I':
-                     return 'Incremental';
-                  default:
-                     return data;
-               }
-            }
-         }
-      ]
-   } );
-
-   var jobdetails2 = $('#jobdetails2').DataTable( {
-      "ajax": {
-         "url": "<?php echo $this->url('job', array('action' => 'getData'), null) . '?data=details&jobid='.$this->jobid; ?>",
-         "dataSrc": ""
-      },
-      "columns": [
-         { "data": "schedtime" },
-         { "data": "starttime" },
-         { "data": "endtime" },
-         { "data": "realendtime" }
-      ],
-      "paging":   false,
-      "ordering": false,
-      "info":     false,
-      "pagingType": "full_numbers",
-      "stateSave": true,
-      "bFilter": false,
-      "columnDefs": [
-      ]
-   } );
-
-   var jobdetails3 = $('#jobdetails3').DataTable( {
-      "ajax": {
-         "url": "<?php echo $this->url('job', array('action' => 'getData'), null) . '?data=details&jobid='.$this->jobid; ?>",
-         "dataSrc": ""
-      },
-      "columns": [
-         { "data": "jobfiles" },
          { "data": null },
-         { "data": "joberrors" },
+         { "data": null },
+         { "data": null },
+         { "data": null },
+         { "data": null },
+         { "data": null },
          { "data": null }
       ],
       "paging":   false,
@@ -247,6 +168,234 @@ $(document).ready(function() {
       "stateSave": true,
       "bFilter": false,
       "columnDefs": [
+         {
+            "targets": 0,
+            "data": null,
+            "render": function(data, type, full, meta) {
+               return data.jobid;
+            }
+         },
+         {
+            "targets": 1,
+            "data": null,
+            "render": function(data, type, full, meta) {
+               return data.name;
+            }
+         },
+         {
+            "targets": 2,
+            "data": null,
+            "render": function(data, type, full, meta) {
+               return data.client;
+            }
+         },
+         {
+            "targets": 3,
+            "data": null,
+            "render": function(data, type, full, meta) {
+               return data.fileset;
+            }
+         },
+         {
+            "targets": 4,
+            "data": null,
+            "render": function(data, type, full, meta) {
+               var output;
+               switch(data.type) {
+                  case 'B':
+                      output = 'Záloha';
+                      break;
+                  case 'M':
+                      output = 'Migrácia';
+                      break;
+                  case 'V':
+                      output = 'Overenie';
+                      break;
+                  case 'R':
+                      output = 'Obnova';
+                      break;
+                  case 'U':
+                      output = 'Konsolový progran';
+                      break;
+                  case 'I':
+                      output = 'Interná systémová úloha';
+                      break;
+                  case 'D':
+                      output = 'Administrácia';
+                      break;
+                  case 'A':
+                      output = 'Archív';
+                      break;
+                  case 'C':
+                      output = 'Copy of a job';
+                      break;
+                  case 'c':
+                      output = 'Kópia úlohy';
+                      break;
+                  case 'g':
+                      output = 'Migrácia úlohy';
+                      break;
+                  case 'S':
+                      output = 'Skenovanie';
+                      break;
+                  default:
+                      output = data.type;
+                      break;
+               }
+               return output;
+            }
+         },
+         {
+            "targets": 5,
+            "data": null,
+            "render": function(data, type, full, meta) {
+               switch(data.level) {
+                  case 'F':
+                     return 'Plná záloha';
+                  case 'D':
+                     return 'Rozdielová';
+                  case 'I':
+                     return 'Prírastková';
+                  default:
+                     return data.level;
+               }
+            }
+         },
+         {
+            "targets": 6,
+            "data": null,
+            "render": function(data, type, full, meta) {
+               return data.poolname;
+            }
+         },
+      ]
+   } );
+
+   var jobdetails2 = $('#jobdetails2').DataTable( {
+	   
+	      	                   "language":    {
+                        "sEmptyTable":     "Nie sú k dispozícii žiadne dáta",
+                        "sInfo":           "Záznam _START_ až _END_ z celkom _TOTAL_",
+                        "sInfoEmpty":      "Záznam 0 až 0 z celkom 0 ",
+                        "sInfoFiltered":   "(vyfiltrované spomedzi _MAX_ záznamov)",
+                        "sInfoPostFix":    "",
+                        "sInfoThousands":  ",",
+                        "sLengthMenu":     "Zobraz _MENU_ záznamov",
+                        "sLoadingRecords": "Načítavam...",
+                        "sProcessing":     "Spracúvam...",
+                        "sSearch":         "Hľadať:",
+						"sStatus":         "Stav",
+                        "sZeroRecords":    "Nenašli sa žiadne vyhovujúce záznamy",
+                        "oPaginate": {
+                                "sFirst":    "Prvá",
+                                "sLast":     "Posledná",
+                                "sNext":     "Nasledujúca",
+                                "sPrevious": "Predchádzajúca"
+                        },
+                        "oAria": {
+                                "sSortAscending":  ": aktivujte na zoradenie stĺpca vzostupne",
+                                "sSortDescending": ": aktivujte na zoradenie stĺpca zostupne"
+                        }
+                },
+				
+      "ajax": {
+         "url": "<?php echo $this->url('job', array('action' => 'getData'), null) . '?data=details&jobid='.$this->jobid; ?>",
+         "dataSrc": ""
+      },
+      "columns": [
+         { "data": null },
+         { "data": null },
+         { "data": null },
+         { "data": null }
+      ],
+      "paging":   false,
+      "ordering": false,
+      "info":     false,
+      "pagingType": "full_numbers",
+      "stateSave": true,
+      "bFilter": false,
+      "columnDefs": [
+         {
+            "targets": 0,
+            "data": null,
+            "render": function(data, type, full, meta) {
+               return data.schedtime;
+            }
+         },
+         {
+            "targets": 1,
+            "data": null,
+            "render": function(data, type, full, meta) {
+               return data.starttime;
+            }
+         },
+         {
+            "targets": 2,
+            "data": null,
+            "render": function(data, type, full, meta) {
+               return data.endtime;
+            }
+         },
+         {
+            "targets": 3,
+            "data": null,
+            "render": function(data, type, full, meta) {
+               return data.realendtime;
+            }
+         }
+      ]
+   } );
+
+   var jobdetails3 = $('#jobdetails3').DataTable( {
+	   
+	                   "language":    {
+                        "sEmptyTable":     "Nie sú k dispozícii žiadne dáta",
+                        "sInfo":           "Záznam _START_ až _END_ z celkom _TOTAL_",
+                        "sInfoEmpty":      "Záznam 0 až 0 z celkom 0 ",
+                        "sInfoFiltered":   "(vyfiltrované spomedzi _MAX_ záznamov)",
+                        "sInfoPostFix":    "",
+                        "sInfoThousands":  ",",
+                        "sLengthMenu":     "Zobraz _MENU_ záznamov",
+                        "sLoadingRecords": "Načítavam...",
+                        "sProcessing":     "Spracúvam...",
+                        "sSearch":         "Hľadať:",
+                        "sZeroRecords":    "Nenašli sa žiadne vyhovujúce záznamy",
+                        "oPaginate": {
+                                "sFirst":    "Prvá",
+                                "sLast":     "Posledná",
+                                "sNext":     "Nasledujúca",
+                                "sPrevious": "Predchádzajúca"
+                        },
+                        "oAria": {
+                                "sSortAscending":  ": aktivujte na zoradenie stĺpca vzostupne",
+                                "sSortDescending": ": aktivujte na zoradenie stĺpca zostupne"
+                        }
+                },
+
+      "ajax": {
+         "url": "<?php echo $this->url('job', array('action' => 'getData'), null) . '?data=details&jobid='.$this->jobid; ?>",
+         "dataSrc": ""
+      },
+      "columns": [
+         { "data": null },
+         { "data": null },
+         { "data": null },
+         { "data": null }
+      ],
+      "paging":   false,
+      "ordering": false,
+      "info":     false,
+      "pagingType": "full_numbers",
+      "stateSave": true,
+      "bFilter": false,
+      "columnDefs": [
+         {
+            "targets": 0,
+            "data": null,
+            "render": function(data, type, full, meta) {
+               return data.jobfiles;
+            }
+         },
          {
             "targets": 1,
             "data": null,
@@ -259,6 +408,13 @@ $(document).ready(function() {
             }
          },
          {
+            "targets": 2,
+            "data": null,
+            "render": function(data, type, full, meta) {
+               return data.joberrors;
+            }
+         },
+         {
             "targets": 3,
             "data": null,
             "render": function(data, type, full, meta) {
@@ -268,79 +424,79 @@ $(document).ready(function() {
                switch(data.jobstatus) {
                   // Non-fatal error
                   case 'e':
-                     output = '<span class="label label-danger">Failure</span>';
+                     output = '<span class="label label-danger">Zlyhanie</span>';
                      break;
                   // Terminated with errors
                   case 'E':
-                     output = '<span class="label label-danger">Failure</span>';
+                     output = '<span class="label label-danger">Zlyhanie</span>';
                      break;
                   // Fatal error
                   case 'f':
-                     output = '<span class="label label-danger">Failure</span>';
+                     output = '<span class="label label-danger">Zlyhanie</span>';
                      break;
                   // Terminated successful
                   case 'T':
-                     output = '<span class="label label-success">Success</span>';
+                     output = '<span class="label label-success">Hotovo</span>';
                      break;
                   // Running
                   case 'R':
-                     output = '<span class="label label-info">Running</span>';
+                     output = '<span class="label label-info">Beží</span>';
                      break;
                   // Created no yet running
                   case 'C':
-                     output = '<span class="label label-default">Queued</span>';
+                     output = '<span class="label label-default">V poradí</span>';
                      break;
                   // Blocked
                   case 'B':
-                     output = '<span class="label label-warning">Blocked</span>';
+                     output = '<span class="label label-warning">Zablokovaná</span>';
                      break;
                   // Verify found differences
                   case 'D':
-                     output = '<span class="label label-warning">Verify found differences</span>';
+                     output = '<span class="label label-warning">Overuje nájdené rozdiely</span>';
                      break;
                   // Canceled by user
                   case 'A':
-                     output = '<span class="label label-warning">Canceled</span>';
+                     output = '<span class="label label-warning">Zrušená</span>';
                      break;
                   // Waiting for client
                   case 'F':
-                     output = '<span class="label label-default">Waiting</span>';
+                     output = '<span class="label label-default">Čaká</span>';
                      break;
                   // Waiting for storage daemon
                   case 'S':
-                     output = '<span class="label label-default">Waiting</span>';
+                     output = '<span class="label label-default">Čaká</span>';
                      break;
                   // Waiting for new media
                   case 'm':
-                     output = '<span class="label label-default">Waiting</span>';
+                     output = '<span class="label label-default">Čaká</span>';
                      break;
                   // Waiting for media mount
                   case 'M':
-                     output = '<span class="label label-default">Waiting</span>';
+                     output = '<span class="label label-default">Čaká</span>';
                      break;
                   // Waiting for storage resource
                   case 's':
-                     output = '<span class="label label-default">Waiting</span>';
+                     output = '<span class="label label-default">Čaká</span>';
                      break;
                   // Waiting for job resource
                   case 'j':
-                     output = '<span class="label label-default">Waiting</span>';
+                     output = '<span class="label label-default">Čaká</span>';
                      break;
                   // Waiting for client resource
                   case 'c':
-                     output = '<span class="label label-default">Waiting</span>';
+                     output = '<span class="label label-default">Čaká</span>';
                      break;
                   // Waiting on maximum jobs
                   case 'd':
-                     output = '<span class="label label-default">Waiting</span>';
+                     output = '<span class="label label-default">Čaká</span>';
                      break;
                   // Waiting on starttime
                   case 't':
-                     output = '<span class="label label-default">Waiting</span>';
+                     output = '<span class="label label-default">Čaká</span>';
                      break;
                   // Waiting on higher priority jobs
                   case 'p':
-                     output = '<span class="label label-default">Waiting</span>';
+                     output = '<span class="label label-default">Čaká</span>';
                      break;
                   // SD despooling attributes
                   case 'a':
@@ -348,19 +504,19 @@ $(document).ready(function() {
                      break;
                   // Doing batch insert file records
                   case 'i':
-                     output = '<span class="label label-info">Doing batch insert file records</span>';
+                     output = '<span class="label label-info">Vykonávam dávkové vkladanie súborových záznamov</span>';
                      break;
                   // Incomplete
                   case 'I':
-                     output = '<span class="label label-primary">Incomplete</span>';
+                     output = '<span class="label label-primary">Nekompletná</span>';
                      break;
                   // Committing data
                   case 'L':
-                     output = '<span class="label label-info">Committing data</span>';
+                     output = '<span class="label label-info">Nahrávam dáta</span>';
                      break;
                   // Terminated with warnings
                   case 'W':
-                     output = '<span class="label label-warning">Warning</span>';
+                     output = '<span class="label label-warning">Varovanie</span>';
                      break;
                   // Doing data despooling
                   case 'l':
@@ -383,12 +539,36 @@ $(document).ready(function() {
    } );
 
    var joblog = $('#joblog').DataTable( {
+	   
+	   	                   "language":    {
+                        "sEmptyTable":     "Nie sú k dispozícii žiadne dáta",
+                        "sInfo":           "Záznam _START_ až _END_ z celkom _TOTAL_",
+                        "sInfoEmpty":      "Záznam 0 až 0 z celkom 0 ",
+                        "sInfoFiltered":   "(vyfiltrované spomedzi _MAX_ záznamov)",
+                        "sInfoPostFix":    "",
+                        "sInfoThousands":  ",",
+                        "sLengthMenu":     "Zobraz _MENU_ záznamov",
+                        "sLoadingRecords": "Načítavam...",
+                        "sProcessing":     "Spracúvam...",
+                        "sSearch":         "Hľadať:",
+                        "sZeroRecords":    "Nenašli sa žiadne vyhovujúce záznamy",
+                        "oPaginate": {
+                                "sFirst":    "Prvá",
+                                "sLast":     "Posledná",
+                                "sNext":     "Nasledujúca",
+                                "sPrevious": "Predchádzajúca"
+                        },
+                        "oAria": {
+                                "sSortAscending":  ": aktivujte na zoradenie stĺpca vzostupne",
+                                "sSortDescending": ": aktivujte na zoradenie stĺpca zostupne"
+                        }
+                },
       "ajax": {
          "url": "<?php echo $this->url('job', array('action' => 'getData'), null) . '?data=logs&jobid='.$this->jobid; ?>",
          "dataSrc": ""
       },
       "columns": [
-         { "data": "time" },
+         { "data": null },
          { "data": null }
       ],
       "paging":   true,
@@ -396,21 +576,27 @@ $(document).ready(function() {
       "info":     true,
       "pagingType": "full_numbers",
       "stateSave": true,
-      "order": [[0, 'desc']],
       "columnDefs": [
+         {
+            "targets": 0,
+            "data": null,
+            "render": function(data, type, full, meta) {
+               return data.time;
+            }
+         },
          {
             "targets": 1,
             "data": null,
             "render": function(data, type, full, meta) {
                var msg = (data.logtext).replace(/\n/g, "<br />");
                if(msg.search("Error") > 0) {
-                  return msg.replace(/Error/g, '<span class="bg-danger text-danger">Error</span>');
+                  return msg.replace(/Error/g, '<span class="bg-danger text-danger">Chyba</span>');
                }
                else if(msg.search("error") > 0) {
-                  return msg.replace(/error/g, '<span class="bg-danger text-danger">error</span>');
+                  return msg.replace(/error/g, '<span class="bg-danger text-danger">chyba</span>');
                }
                else if(msg.search("Warning") > 0) {
-                  return msg.replace(/Warning/g, '<span class="bg-warning text-warning">Warning</span>');
+                  return msg.replace(/Warning/g, '<span class="bg-warning text-warning">Varovanie</span>');
                }
                else {
                   return msg;
