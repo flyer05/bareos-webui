@@ -73,7 +73,7 @@ return array(
       ),
     ),
     'translator' => array(
-   'locale' => 'en_US',
+   'locale' => 'sk_SK',
    'translation_file_patterns' => array(
        array(
       'type'     => 'gettext',
@@ -91,6 +91,7 @@ return array(
       'invokables' => array (
       'printDate' => 'Application\View\Helper\Date',
       'printJobStatus' => 'Application\View\Helper\JobStatus',
+      'printJobLevel' => 'Application\View\Helper\JobLevel',
       'printJobType' => 'Application\View\Helper\JobType',
       'printJobDuration' => 'Application\View\Helper\JobDuration',
       'printBytes' => 'Application\View\Helper\Bytes',
@@ -129,39 +130,39 @@ return array(
     'navigation' => array(
       'default' => array(
          array(
-            'label' => 'Dashboard',
+            'label' => 'Nástenka',
             'route' => 'dashboard',
          ),
          array(
-            'label' => 'Director',
+            'label' => 'Správca',
             'route' => 'director',
          ),
          array(
-            'label' => 'Filesets',
+            'label' => 'Súborové Sety',
             'route' => 'fileset',
          ),
          array(
-            'label' => 'Pools',
+            'label' => 'Skupiny',
             'route' => 'pool',
          ),
          array(
-            'label' => 'Volumes',
+            'label' => 'Médiá',
             'route' => 'media',
          ),
          array(
-            'label' => 'Storages',
+            'label' => 'Úložiská',
             'route' => 'storage',
          ),
          array(
-            'label' => 'Clients',
+            'label' => 'Klienti',
             'route' => 'client',
          ),
          array(
-            'label' => 'Jobs',
+            'label' => 'Úlohy',
             'route' => 'job',
          ),
          array(
-            'label' => 'Restore',
+            'label' => 'Obnova',
             'route' => 'restore',
          ),
       ),
