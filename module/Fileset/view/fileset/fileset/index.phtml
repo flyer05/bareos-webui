@@ -23,7 +23,7 @@
  *
  */
 
-$title = 'Filesets';
+$title = 'Súborový set';
 $this->headTitle($title);
 
 ?>
@@ -34,7 +34,7 @@ $this->headTitle($title);
 <div class="panel panel-default">
 
 <div class="panel-heading">
-<h3 class="panel-title">Filesets</h3>
+<h3 class="panel-title">Súborový set</h3>
 </div>
 
 <div class="panel-body">
@@ -43,8 +43,8 @@ $this->headTitle($title);
 
 <thead class="bg-primary">
    <th><?php echo $this->translate("Id"); ?></th>
-   <th><?php echo $this->translate("Name"); ?></th>
-   <th><?php echo $this->translate("Creation time"); ?></th>
+   <th><?php echo $this->translate("Meno"); ?></th>
+   <th><?php echo $this->translate("Čas vytvorenia"); ?></th>
 </thead>
 
 </table>
@@ -63,32 +63,65 @@ $this->headTitle($title);
 <script>
 
    var tab_filesets = $('#filesets').DataTable( {
+
+                "language":    {
+                        "sEmptyTable":     "Nie sú k dispozícii žiadne dáta",
+                        "sInfo":           "Záznam _START_ až _END_ z celkom _TOTAL_",
+                        "sInfoEmpty":      "Záznam 0 až 0 z celkom 0 ",
+                        "sInfoFiltered":   "(vyfiltrované spomedzi _MAX_ záznamov)",
+                        "sInfoPostFix":    "",
+                        "sInfoThousands":  ",",
+                        "sLengthMenu":     "Zobraz _MENU_ záznamov",
+                        "sLoadingRecords": "Načítavam...",
+                        "sProcessing":     "Spracúvam...",
+                        "sSearch":         "Hľadať:",
+                        "sZeroRecords":    "Nenašli sa žiadne vyhovujúce záznamy",
+                        "oPaginate": {
+                                "sFirst":    "Prvá",
+                                "sLast":     "Posledná",
+                                "sNext":     "Nasledujúca",
+                                "sPrevious": "Predchádzajúca"
+                        },
+                        "oAria": {
+                                "sSortAscending":  ": aktivujte na zoradenie stĺpca vzostupne",
+                                "sSortDescending": ": aktivujte na zoradenie stĺpca zostupne"
+                        }
+                },
+
       "ajax": {
          "url": "<?php echo $this->url('fileset', array('action' => 'getData'), null) . '?data=all'; ?>",
          "dataSrc": ""
       },
       "columns": [
-         { "data": "filesetid" },
          { "data": null },
-         { "data": "createtime" },
+         { "data": null },
+         { "data": null },
       ],
       "paging":   true,
       "ordering": true,
       "info":     true,
       "pagingType": "full_numbers",
       "stateSave": true,
-      "order": [[0, 'desc']],
       "columnDefs": [
          {
             "targets": 0,
+            "data": null,
             "render": function(data, type, full, meta) {
-               return '<a href="<?php echo $this->basePath() . '/fileset/details/'; ?>'+data+'">'+data+'</a>';
+               return '<a href="<?php echo $this->basePath() . '/fileset/details/'; ?>'+data.filesetid+'">'+data.filesetid+'</a>';
             }
          },
          {
             "targets": 1,
+            "data": null,
             "render": function(data, type, full, meta) {
                return '<a href="<?php echo $this->basePath() . '/fileset/details/'; ?>'+data.filesetid+'">'+data.fileset+'</a>';
+            }
+         },
+         {
+            "targets": 2,
+            "data": null,
+            "render": function(data, type, full, meta) {
+               return data.createtime;
             }
          }
       ]

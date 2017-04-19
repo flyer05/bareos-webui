@@ -23,7 +23,7 @@
  *
  */
 
-$title = 'Fileset details';
+$title = 'Detaily Súborového setu';
 $this->headTitle($title);
 
 ?>
@@ -34,7 +34,7 @@ $this->headTitle($title);
 <div class="panel panel-default">
 
 <div class="panel-heading">
-<h3 class="panel-title">Fileset</h3>
+<h3 class="panel-title">Súborový set</h3>
 </div>
 
 <div class="panel-body">
@@ -43,9 +43,9 @@ $this->headTitle($title);
 
 <thead class="bg-primary">
    <th>Id</th>
-   <th>Name</th>
-   <th>MD5 checksum</th>
-   <th>Creation time</th>
+   <th>Meno</th>
+   <th>MD5 kontrola</th>
+   <th>Čas vytvorenia</th>
 </thead>
 
 </table>
@@ -75,16 +75,47 @@ $this->headTitle($title);
          "dataSrc": ""
       },
       "columns": [
-         { "data": "filesetid" },
-         { "data": "fileset" },
-         { "data": "md5" },
-         { "data": "createtime" }
+         { "data": null },
+         { "data": null },
+         { "data": null },
+         { "data": null }
       ],
       "paging":   false,
       "ordering": false,
       "info":     false,
+      "pagingType": "full_numbers",
       "stateSave": true,
       "bFilter": false,
+      "columnDefs": [
+         {
+            "targets": 0,
+            "data": null,
+            "render": function(data, type, full, meta) {
+               return data.filesetid;
+            }
+         },
+         {
+            "targets": 1,
+            "data": null,
+            "render": function(data, type, full, meta) {
+               return data.fileset;
+            }
+         },
+         {
+            "targets": 2,
+            "data": null,
+            "render": function(data, type, full, meta) {
+               return data.md5;
+            }
+         },
+         {
+            "targets": 3,
+            "data": null,
+            "render": function(data, type, full, meta) {
+               return data.createtime;
+            }
+         }
+      ]
    } );
 
 </Script>
