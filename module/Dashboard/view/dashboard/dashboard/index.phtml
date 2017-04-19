@@ -24,7 +24,7 @@
  *
  */
 
-$title = 'Dashboard';
+$title = 'Úvodná tabuľa';
 $this->headTitle($title);
 
 ?>
@@ -38,7 +38,7 @@ $this->headTitle($title);
    <div class="panel-heading">
       <h3 class="panel-title">
       <span class="glyphicon glyphicon-stats"></span>
-      <?php echo $this->translate('Jobs during the past 24 hours') ?>
+      <?php echo $this->translate('Posledné joby počas 24 hodín') ?>
       </h3>
    </div>
 
@@ -48,19 +48,19 @@ $this->headTitle($title);
 
       <table class="table">
          <tr>
-            <td><a href="<?php echo $this->url('job', array('action' => 'index'), array('query' => array('period' => '1', 'status' => 'running'))); ?>"><?php echo $this->translate("Running"); ?></a></td>
+            <td><a href="<?php echo $this->url('job', array('action' => 'index'), array('query' => array('period' => '1', 'status' => 'running'))); ?>"><?php echo $this->translate("Bežiacich"); ?></a></td>
             <td><a href="<?php echo $this->url('job', array('action' => 'index'), array('query' => array('period' => '1', 'status' => 'running'))); ?>"><?php echo $this->runningJobs; ?></a></td>
          </tr>
          <tr>
-            <td><a href="<?php echo $this->url('job', array('action' => 'index'), array('query' => array('period' => '1', 'status' => 'waiting'))); ?>"><?php echo $this->translate("Waiting"); ?></a></td>
+            <td><a href="<?php echo $this->url('job', array('action' => 'index'), array('query' => array('period' => '1', 'status' => 'waiting'))); ?>"><?php echo $this->translate("Čakájúcich"); ?></a></td>
             <td><a href="<?php echo $this->url('job', array('action' => 'index'), array('query' => array('period' => '1', 'status' => 'waiting'))); ?>"><?php echo $this->waitingJobs; ?></a></td>
          </tr>
          <tr>
-            <td><a href="<?php echo $this->url('job', array('action' => 'index'), array('query' => array('period' => '1', 'status' => 'successful'))); ?>"><?php echo $this->translate("Successful"); ?></a></td>
+            <td><a href="<?php echo $this->url('job', array('action' => 'index'), array('query' => array('period' => '1', 'status' => 'successful'))); ?>"><?php echo $this->translate("Kompletných"); ?></a></td>
             <td><a href="<?php echo $this->url('job', array('action' => 'index'), array('query' => array('period' => '1', 'status' => 'successful'))); ?>"><?php echo $this->successfulJobs; ?></a></td>
          </tr>
          <tr>
-            <td><a href="<?php echo $this->url('job', array('action' => 'index'), array('query' => array('period' => '1', 'status' => 'unsuccessful'))); ?>"><?php echo $this->translate("Unsuccessful"); ?></a></td>
+            <td><a href="<?php echo $this->url('job', array('action' => 'index'), array('query' => array('period' => '1', 'status' => 'unsuccessful'))); ?>"><?php echo $this->translate("Nekompletných"); ?></a></td>
             <td><a href="<?php echo $this->url('job', array('action' => 'index'), array('query' => array('period' => '1', 'status' => 'unsuccessful'))); ?>"><?php echo $this->unsuccessfulJobs; ?></a></td>
          </tr>
       </table>
@@ -75,6 +75,13 @@ $this->headTitle($title);
 
 </div>
 
+</div>
+
+<div class="col-md-4">
+<div class="alert alert-dismissable alert-warning" role="alert">
+<button type="button" class="close" data-dismiss="alert" aria-hidden="true">×</button>
+Upozornenie! Teraz máš možnosť <a href="<?php echo $this->url('restore', array()); ?>" class="alert-link"><?php echo $this->translate("obnoviť"); ?></a> všetky dáta prostredníctvom tohoto webui.
+</div>
 </div>
 
 </div>
@@ -93,10 +100,10 @@ $this->headTitle($title);
    function chart1() {
 
       var data = [
-         ['Running', <?php echo $this->runningJobs; ?>],
-         ['Waiting', <?php echo $this->waitingJobs; ?>],
-         ['Successful', <?php echo $this->successfulJobs; ?>],
-         ['Unsuccessful', <?php echo $this->unsuccessfulJobs; ?>]
+         ['Bežiacich', <?php echo $this->runningJobs; ?>],
+         ['Čakájúcich', <?php echo $this->waitingJobs; ?>],
+         ['Kompletných', <?php echo $this->successfulJobs; ?>],
+         ['Nekompletných', <?php echo $this->unsuccessfulJobs; ?>]
       ];
 
       var plot1 = jQuery.jqplot(
