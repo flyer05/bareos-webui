@@ -46,8 +46,8 @@ class LoginForm extends Form
                   'name' => 'director',
                   'type' => 'select',
                   'options' => array(
-                     'label' => 'Director',
-                     'empty_option' => 'Please choose a director',
+                     'label' => 'Správca',
+                     'empty_option' => 'Vyberte prosím správcu',
                      'value_options' => $this->directors,
                   ),
                   'attributes' => array(
@@ -62,8 +62,8 @@ class LoginForm extends Form
                   'name' => 'director',
                   'type' => 'select',
                   'options' => array(
-                     'label' => 'Director',
-                     'empty_option' => 'Please choose a director',
+                     'label' => 'Sorávca',
+                     'empty_option' => 'Vyberte prosím správcu',
                      'value_options' => $this->directors,
                   ),
                   'attributes' => array(
@@ -77,10 +77,10 @@ class LoginForm extends Form
                'name' => 'consolename',
                'type' => 'text',
                'options' => array(
-                  'label' => 'Username',
+                  'label' => 'Používateľské meno',
                ),
                'attributes' => array(
-                  'placeholder' => 'Username',
+                  'placeholder' => 'Používateľské meno',
                ),
             )
       );
@@ -89,10 +89,10 @@ class LoginForm extends Form
                'name' => 'password',
                'type' => 'password',
                'options' => array(
-                  'label' => 'Password',
+                  'label' => 'Heslo',
                ),
                'attributes' => array(
-                  'placeholder' => 'Password',
+                  'placeholder' => 'Heslo',
                ),
             )
       );
@@ -101,7 +101,7 @@ class LoginForm extends Form
          'name' => 'submit',
          'type' => 'submit',
          'attributes' => array(
-            'value' => 'Login',
+            'value' => 'Prihlásiť',
             'id' => 'submit',
          ),
       )
