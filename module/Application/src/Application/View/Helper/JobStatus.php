@@ -36,31 +36,31 @@ class JobStatus extends AbstractHelper
       {
          // Non-fatal error
       case 'e':
-         $output = '<span class="label label-danger">Failure</span>';
+         $output = '<span class="label label-danger">Chyba</span>';
          break;
          // Terminated with errors
       case 'E':
-         $output = '<span class="label label-danger">Failure</span>';
+         $output = '<span class="label label-danger">Chyba</span>';
          break;
          // Fatal error
       case 'f':
-         $output = '<span class="label label-danger">Failure</span>';
+         $output = '<span class="label label-danger">Chyba</span>';
          break;
          // Terminated successful
       case 'T':
-         $output = '<span class="label label-success">Success</span>';
+         $output = '<span class="label label-success">Hotovo</span>';
          break;
          // Running
       case 'R':
-         $output = '<span class="label label-info">Running</span>';
+         $output = '<span class="label label-info">Beží</span>';
          break;
          // Created no yet running
       case 'C':
-         $output = '<span class="label label-default">Queued</span>';
+         $output = '<span class="label label-default">V queue</span>';
          break;
          // Blocked
       case 'B':
-         $output = '<span class="label label-warning">Blocked</span>';
+         $output = '<span class="label label-warning">Blokovaná</span>';
          break;
          // Verify found differences
       case 'D':
@@ -68,51 +68,51 @@ class JobStatus extends AbstractHelper
          break;
          // Canceled by user
       case 'A':
-         $output = '<span class="label label-warning">Canceled</span>';
+         $output = '<span class="label label-warning">Zrušená</span>';
          break;
          // Waiting for client
       case 'F':
-         $output = '<span class="label label-default">Waiting</span>';
+         $output = '<span class="label label-default">Čaká</span>';
          break;
          // Waiting for storage daemon
       case 'S':
-         $output = '<span class="label label-default">Waiting</span>';
+         $output = '<span class="label label-default">Čaká</span>';
          break;
          // Waiting for new media
       case 'm':
-         $output = '<span class="label label-default">Waiting</span>';
+         $output = '<span class="label label-default">Čaká</span>';
          break;
          // Waiting for media mount
       case 'M':
-         $output = '<span class="label label-default">Waiting</span>';
+         $output = '<span class="label label-default">Čaká</span>';
          break;
          // Waiting for storage resource
       case 's':
-         $output = '<span class="label label-default">Waiting</span>';
+         $output = '<span class="label label-default">Čaká</span>';
          break;
          // Waiting for job resource
       case 'j':
-         $output = '<span class="label label-default">Waiting</span>';
+         $output = '<span class="label label-default">Čaká</span>';
          break;
          // Waiting for client resource
       case 'c':
-         $output = '<span class="label label-default">Waiting</span>';
+         $output = '<span class="label label-default">Čaká</span>';
          break;
          // Waiting on maximum jobs
       case 'd':
-         $output = '<span class="label label-default">Waiting</span>';
+         $output = '<span class="label label-default">Čaká</span>';
          break;
          // Waiting on starttime
       case 't':
-         $output = '<span class="label label-default">Waiting</span>';
+         $output = '<span class="label label-default">Čaká</span>';
          break;
          // Waiting on higher priority jobs
       case 'p':
-         $output = '<span class="label label-default">Waiting</span>';
+         $output = '<span class="label label-default">Čaká</span>';
          break;
          // SD despooling attributes
       case 'a':
-         $output = '<span class="label label-info">SD despooling attributes</span>';
+         $output = '<span class="label label-info">SD despooling attribu</span>';
          break;
          // Doing batch insert file records
       case 'i':
@@ -120,15 +120,15 @@ class JobStatus extends AbstractHelper
          break;
          // Incomplete
       case 'I':
-         $output = '<span class="label label-primary">Incomplete</span>';
+         $output = '<span class="label label-primary">Nekompletná</span>';
          break;
          // Committing data
       case 'L':
-         $output = '<span class="label label-info">Committing data</span>';
+         $output = '<span class="label label-info">Vkladá dáta</span>';
          break;
          // Terminated with warnings
       case 'W':
-         $output = '<span class="label label-warning">Warning</span>';
+         $output = '<span class="label label-warning">Varovanie</span>';
          break;
          // Doing data despooling
       case 'l':
