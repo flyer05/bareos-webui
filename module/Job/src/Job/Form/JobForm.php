@@ -46,13 +46,13 @@ class JobForm extends Form
             'name' => 'period',
             'type' => 'select',
             'options' => array(
-               'label' => 'Time period',
+               'label' => 'Časová perióda',
                'value_options' => array(
-                  '1' => 'past 24 hours',
-                  '7' => 'last week',
-                  '31' => 'last month',
-                  '365' => 'last year',
-                  'all' => 'all'
+                  '1' => 'posledných 24 hodín',
+                  '7' => 'posledný týžden',
+                  '31' => 'posledný mesiac',
+                  '365' => 'posledný rok',
+                  'all' => 'všetko'
                )
             ),
             'attributes' => array(
@@ -69,13 +69,13 @@ class JobForm extends Form
             'name' => 'status',
             'type' => 'select',
             'options' => array(
-               'label' => 'Status',
+               'label' => 'Stav',
                'value_options' => array(
-                  'all' => 'all',
-                  'running' => 'running',
-                  'waiting' => 'waiting',
-                  'unsuccessful' => 'unsuccessful',
-                  'successful' => 'successful'
+                  'all' => 'všetky',
+                  'running' => 'beží',
+                  'waiting' => 'čaká',
+                  'unsuccessful' => 'neúspešná',
+                  'successful' => 'úspešná'
                )
             ),
             'attributes' => array(
